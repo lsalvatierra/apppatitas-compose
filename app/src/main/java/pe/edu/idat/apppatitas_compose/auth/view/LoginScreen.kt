@@ -52,7 +52,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import pe.edu.idat.apppatitas_compose.core.rutas.Ruta
 
 @Composable
-fun loginScreen(authViewModel: LoginViewModel, navController: NavController) {
+fun loginScreen(loginViewModel: LoginViewModel, navController: NavController) {
     val snackbarHostState = remember {
         SnackbarHostState()
     }
@@ -64,7 +64,7 @@ fun loginScreen(authViewModel: LoginViewModel, navController: NavController) {
                 .padding(paddingInit)
         ) {
             header(Modifier.align(Alignment.TopEnd))
-            body(Modifier.align(Alignment.Center), authViewModel, snackbarHostState, navController)
+            body(Modifier.align(Alignment.Center), loginViewModel, snackbarHostState, navController)
             footer(Modifier.align(Alignment.BottomCenter), navController)
         }
     }
