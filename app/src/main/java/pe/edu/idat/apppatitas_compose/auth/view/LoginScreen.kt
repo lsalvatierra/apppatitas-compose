@@ -26,10 +26,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +51,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import pe.edu.idat.apppatitas_compose.R
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import pe.edu.idat.apppatitas_compose.core.rutas.Ruta
 
 @Composable
@@ -144,12 +148,27 @@ fun loginButton(loginEnable: Boolean,
                 loginViewModel: LoginViewModel,
                 state: SnackbarHostState,
                 navController: NavController) {
+    val loginResponse by loginViewModel.loginResponse.observeAsState()
+    val scope = rememberCoroutineScope()
     Button(
         onClick = { loginViewModel.loginUserPassword() },
         enabled = loginEnable,
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(text = "INGRESAR")
+    }
+    // Manejar el estado del loginResponse
+    loginResponse?.getContentIfNotHandled()?.let { response ->
+        // Aquí puedes manejar la respuesta del login, por ejemplo:
+        if (response.rpta) {
+            navController.navigate("HomeScreen")
+        } else {
+            scope.launch {
+                state.showSnackbar("Login fallido: ${response.mensaje}",
+                    actionLabel = "OK",
+                    duration = SnackbarDuration.Short)
+            }
+        }
     }
 }
 

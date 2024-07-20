@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import pe.edu.idat.apppatitas_compose.auth.data.network.request.LoginRequest
 import pe.edu.idat.apppatitas_compose.auth.data.network.response.LoginResponse
 import pe.edu.idat.apppatitas_compose.auth.domain.LoginUseCase
+import pe.edu.idat.apppatitas_compose.core.utils.Event
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,8 +25,8 @@ class LoginViewModel @Inject constructor(
     val password: LiveData<String> = _password
     private var _isLoginEnable = MutableLiveData<Boolean>()
     var isLoginEnable: LiveData<Boolean> = _isLoginEnable
-    private val _loginResponse = MutableLiveData<LoginResponse>()
-    val loginResponse: LiveData<LoginResponse> = _loginResponse
+    private val _loginResponse = MutableLiveData<Event<LoginResponse>>()
+    val loginResponse: LiveData<Event<LoginResponse>> = _loginResponse
 
     fun onLoginChanged(email: String, password: String) {
         _email.value = email
@@ -35,15 +36,15 @@ class LoginViewModel @Inject constructor(
 
     fun loginUserPassword(){
         viewModelScope.launch {
-            _loginResponse.value = loginUseCase(
+            val response = loginUseCase(
                 LoginRequest(
                     email.value!!,
                     password.value!!
                 )
             )
+            _loginResponse.value = Event(response)
             Log.i("LOGINPATITAS", loginResponse.value!!.toString())
         }
-
     }
 
     fun habilitarButtonLogin(email: String, password: String) =
