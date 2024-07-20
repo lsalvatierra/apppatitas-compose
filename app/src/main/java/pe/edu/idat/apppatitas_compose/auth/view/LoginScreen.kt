@@ -1,7 +1,6 @@
 package pe.edu.idat.apppatitas_compose.auth.view
 
 import android.app.Activity
-import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,7 +30,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +51,7 @@ import pe.edu.idat.apppatitas_compose.R
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
+import pe.edu.idat.apppatitas_compose.auth.viewmodel.LoginViewModel
 import pe.edu.idat.apppatitas_compose.core.rutas.Ruta
 
 @Composable

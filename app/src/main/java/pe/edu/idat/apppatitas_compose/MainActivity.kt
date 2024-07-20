@@ -12,7 +12,7 @@ import androidx.navigation.compose.composable
 
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import pe.edu.idat.apppatitas_compose.auth.view.LoginViewModel
+import pe.edu.idat.apppatitas_compose.auth.viewmodel.LoginViewModel
 import pe.edu.idat.apppatitas_compose.auth.view.loginScreen
 import pe.edu.idat.apppatitas_compose.auth.view.registroScreen
 import pe.edu.idat.apppatitas_compose.core.rutas.Ruta

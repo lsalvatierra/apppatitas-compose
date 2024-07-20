@@ -1,7 +1,6 @@
-package pe.edu.idat.apppatitas_compose.auth.view
+package pe.edu.idat.apppatitas_compose.auth.viewmodel
 
 import android.util.Log
-import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
