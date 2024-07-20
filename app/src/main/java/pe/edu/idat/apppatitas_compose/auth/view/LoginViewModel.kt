@@ -24,8 +24,6 @@ class LoginViewModel @Inject constructor(
     val password: LiveData<String> = _password
     private var _isLoginEnable = MutableLiveData<Boolean>()
     var isLoginEnable: LiveData<Boolean> = _isLoginEnable
-    private val _isLoginValid = MutableLiveData<Boolean>()
-    val isLoginValid: LiveData<Boolean> = _isLoginValid
     private val _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse: LiveData<LoginResponse> = _loginResponse
 
@@ -35,7 +33,7 @@ class LoginViewModel @Inject constructor(
         _isLoginEnable.value = habilitarButtonLogin(email, password)
     }
 
-    fun authUserPassword(): LoginResponse{
+    fun loginUserPassword(){
         viewModelScope.launch {
             _loginResponse.value = loginUseCase(
                 LoginRequest(
@@ -43,13 +41,11 @@ class LoginViewModel @Inject constructor(
                     password.value!!
                 )
             )
+            Log.i("LOGINPATITAS", loginResponse.value!!.toString())
         }
-        return  loginResponse.value!!
-        /*return email.value.equals("lsalvat@gmail.com") &&
-                password.value.equals("1234567")*/
+
     }
 
     fun habilitarButtonLogin(email: String, password: String) =
-        //Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.length > 6
         email.length > 1 && password.length > 1
 }

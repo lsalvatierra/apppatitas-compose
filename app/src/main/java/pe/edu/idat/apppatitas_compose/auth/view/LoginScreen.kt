@@ -145,7 +145,7 @@ fun loginButton(loginEnable: Boolean,
                 state: SnackbarHostState,
                 navController: NavController) {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = { loginViewModel.loginUserPassword() },
         enabled = loginEnable,
         modifier = Modifier.fillMaxWidth()
     ) {

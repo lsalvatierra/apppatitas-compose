@@ -12,11 +12,11 @@ import retrofit2.http.PUT
 interface PatitasClient {
 
     @POST("login.php")
-    fun login(@Body requestLogin: LoginRequest)
+    suspend fun login(@Body requestLogin: LoginRequest)
         : Response<LoginResponse>
 
     @PUT("persona.php")
-    fun registro(@Body requestRegistro: RegistroRequest)
+    suspend fun registro(@Body requestRegistro: RegistroRequest)
         : Response<RegistroResponse>
 
 
