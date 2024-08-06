@@ -1,4 +1,4 @@
-package pe.edu.idat.apppatitas_compose.auth.data.network.retrofitclient
+package pe.edu.idat.apppatitas_compose.core.retrofit
 
 import pe.edu.idat.apppatitas_compose.auth.data.network.request.LoginRequest
 import pe.edu.idat.apppatitas_compose.auth.data.network.request.RegistroRequest

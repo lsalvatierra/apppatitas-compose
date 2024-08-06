@@ -28,6 +28,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,9 +44,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import pe.edu.idat.apppatitas_compose.R
+import pe.edu.idat.apppatitas_compose.core.rutas.Ruta
 import pe.edu.idat.apppatitas_compose.core.utils.MenuItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,11 +66,11 @@ fun homeScreen(){
                 coroutineScope.launch {
                     drawerState.close()
                 }
-                /*when (item.title) {
-                    "My Files" -> navController.navigate(Screen.MyFiles.route)
-                    "Shared with me" -> navController.navigate(Screen.SharedWithMe.route)
+                when (item.title) {
+                    "Mascotas" -> navController.navigate(Ruta.mascotaScreen.path)
+                    "Voluntario" -> navController.navigate(Ruta.voluntarioScreen.path)
                     // Manejar otros elementos del menú si es necesario
-                }*/
+                }
             })
         },
         content = {
@@ -87,15 +91,14 @@ fun homeScreen(){
                         }
                     }
                 )
-                /*NavHost(
+                NavHost(
                     navController = navController,
-                    startDestination = Screen.MyFiles.route,
-                    modifier = Modifier.padding(it)
+                    startDestination = Ruta.mascotaScreen.path
                 ) {
-                    composable(Screen.MyFiles.route) { MyFilesScreen() }
-                    composable(Screen.SharedWithMe.route) { SharedWithMeScreen() }
+                    composable(Ruta.mascotaScreen.path) { mascotaScreen() }
+                    composable(Ruta.voluntarioScreen.path) { voluntarioScreen() }
                     // Agrega otras rutas aquí si es necesario
-                }*/
+                }
             }
         }
     )
@@ -165,13 +168,8 @@ fun DrawerMenuItem(
 
 fun opcionesMenu(): List<MenuItem>{
     val menuItems = listOf(
-        MenuItem(Icons.Default.Folder, "My Files"),
-        MenuItem(Icons.Default.People, "Shared with me"),
-        MenuItem(Icons.Default.Star, "Starred"),
-        MenuItem(Icons.Default.History, "Recent"),
-        MenuItem(Icons.Default.OfflinePin, "Offline"),
-        MenuItem(Icons.Default.CloudUpload, "Uploads"),
-        MenuItem(Icons.Default.Backup, "Backups")
+        MenuItem(Icons.Default.Folder, "Mascotas"),
+        MenuItem(Icons.Default.People, "Voluntario")
     )
     return menuItems
 }
