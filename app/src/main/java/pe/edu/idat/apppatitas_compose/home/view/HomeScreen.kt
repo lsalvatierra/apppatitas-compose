@@ -36,6 +36,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,14 +53,14 @@ import kotlinx.coroutines.launch
 import pe.edu.idat.apppatitas_compose.R
 import pe.edu.idat.apppatitas_compose.core.rutas.Ruta
 import pe.edu.idat.apppatitas_compose.core.utils.MenuItem
+import pe.edu.idat.apppatitas_compose.home.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun homeScreen(){
+fun homeScreen(homeViewModel: HomeViewModel){
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     val navController = rememberNavController()
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -95,7 +97,7 @@ fun homeScreen(){
                     navController = navController,
                     startDestination = Ruta.mascotaScreen.path
                 ) {
-                    composable(Ruta.mascotaScreen.path) { mascotaScreen() }
+                    composable(Ruta.mascotaScreen.path) { mascotaScreen(homeViewModel) }
                     composable(Ruta.voluntarioScreen.path) { voluntarioScreen() }
                     // Agrega otras rutas aquí si es necesario
                 }
