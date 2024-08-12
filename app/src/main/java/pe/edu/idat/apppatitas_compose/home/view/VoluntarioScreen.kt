@@ -14,19 +14,24 @@ import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import pe.edu.idat.apppatitas_compose.home.viewmodel.HomeViewModel
 
 
@@ -44,14 +49,13 @@ fun voluntarioScreen(homeViewModel: HomeViewModel) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            persona?.let {
-                value ->
-                if(value.esvoluntario == "1"){
+            persona?.let { value ->
+                if (value.esvoluntario == "1") {
                     cabeceraVoluntario("Gracias por ser parte de nuestro equipo.")
-                }else{
+                } else {
                     cabeceraVoluntario("¡UNETE A NOSOTROS!")
                     Spacer(modifier = Modifier.height(10.dp))
-                    formularioVoluntario()
+                    formularioVoluntario(homeViewModel, snackbarHostState)
                 }
             }
 
@@ -72,44 +76,73 @@ fun cabeceraVoluntario(texto: String) {
                 .width(100.dp)
                 .height(100.dp)
         )
-        Text(text = texto,
+        Text(
+            text = texto,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 
 @Composable
-fun formularioVoluntario(){
+fun formularioVoluntario(homeViewModel: HomeViewModel,
+                         state: SnackbarHostState) {
+    var isChecked by remember { mutableStateOf(false) }
     Column(
         Modifier
             .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         lblTerminosCondiciones()
-        cbTerminosCondiciones()
-        btnRegistrarVoluntario()
+        cbTerminosCondiciones(isChecked) { isChecked = it }
+        btnRegistrarVoluntario(isChecked, homeViewModel, state)
     }
 }
 
 @Composable
-fun lblTerminosCondiciones(){
-    Text(text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-        fontSize = 12.sp, textAlign = TextAlign.Justify)
+fun lblTerminosCondiciones() {
+    Text(
+        text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        fontSize = 12.sp, textAlign = TextAlign.Justify
+    )
 }
 
 @Composable
-fun cbTerminosCondiciones(){
+fun cbTerminosCondiciones(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row {
-        Checkbox(checked = false, onCheckedChange = { it })
+        Checkbox(checked = isChecked, onCheckedChange = { onCheckedChange(it) })
         Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "Aceptar términos y condiciones", Modifier.padding(top = 12.dp),
-            fontSize = 12.sp)
+        Text(
+            text = "Aceptar términos y condiciones", Modifier.padding(top = 12.dp),
+            fontSize = 12.sp
+        )
     }
 }
 
 @Composable
-fun btnRegistrarVoluntario(){
-    Button(onClick = { /*TODO*/ }, Modifier.fillMaxWidth()) {
+fun btnRegistrarVoluntario(
+    isEnabled: Boolean,
+    homeViewModel: HomeViewModel,
+    state: SnackbarHostState
+) {
+    val voluntarioResponse by homeViewModel.voluntarioResponse.observeAsState()
+    val scope = rememberCoroutineScope()
+    Button(
+        onClick = {
+            homeViewModel.actualizarPersonaVoluntario()
+        }, Modifier.fillMaxWidth(),
+        enabled = isEnabled
+    ) {
         Text(text = "Registrar Voluntario")
+    }
+    voluntarioResponse?.let { value ->
+        scope.launch {
+            state.showSnackbar(
+                value.mensaje,
+                actionLabel = "OK",
+                duration = SnackbarDuration.Short
+            )
+        }
     }
 }

@@ -7,12 +7,12 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "persona")
 data class PersonaEntity(
     @PrimaryKey
-    val id: Int,
-    val nombres: String,
-    val apellidos: String,
-    val email: String,
-    val celular: String,
-    val usuario: String,
-    val password: String,
-    val esvoluntario: String
+    var id: Int,
+    var nombres: String,
+    var apellidos: String,
+    var email: String,
+    var celular: String,
+    var usuario: String,
+    var password: String,
+    var esvoluntario: String
 )
