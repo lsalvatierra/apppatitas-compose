@@ -1,19 +1,23 @@
 package pe.edu.idat.apppatitas_compose.home.data.repository
 
-import kotlinx.coroutines.flow.Flow
+import androidx.lifecycle.LiveData
 import pe.edu.idat.apppatitas_compose.core.bd.PersonaEntity
-import pe.edu.idat.apppatitas_compose.core.bd.PersonasDao
+import pe.edu.idat.apppatitas_compose.core.bd.PersonaDao
 import javax.inject.Inject
 
 class PersonaHomeRepository @Inject constructor(
-    private val personaDao: PersonasDao
+    private val personaDao: PersonaDao
 ) {
+
+    suspend fun actualizarPersona(personaEntity: PersonaEntity){
+        personaDao.actualizarPersona(personaEntity)
+    }
 
     suspend fun eliminarPersona(){
         personaDao.eliminarPersona()
     }
 
-    fun obtenerPersona(): Flow<PersonaEntity> {
+    fun obtenerPersona(): LiveData<PersonaEntity> {
         return personaDao.obtenerPersona()
     }
 }

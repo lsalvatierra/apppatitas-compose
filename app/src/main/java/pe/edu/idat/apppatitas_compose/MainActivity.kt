@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                             registroScreen(registroViewModel, navigation)
                         }
                         composable(Ruta.homeScreen.path) {
-                            homeScreen(homeViewModel)
+                            homeScreen(homeViewModel, navigation)
                         }
                     })
             }

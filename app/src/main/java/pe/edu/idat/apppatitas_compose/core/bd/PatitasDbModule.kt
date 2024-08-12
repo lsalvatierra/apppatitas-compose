@@ -15,7 +15,7 @@ class PatitasDbModule {
 
 
     @Provides
-    fun providePersonaDao(patitasDatabase: PatitasDatabase): PersonasDao{
+    fun providePersonaDao(patitasDatabase: PatitasDatabase): PersonaDao{
         return patitasDatabase.personaDao()
     }
 

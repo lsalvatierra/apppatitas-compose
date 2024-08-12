@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Backup
 import androidx.compose.material.icons.filled.CloudUpload
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Menu
@@ -46,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -57,7 +59,9 @@ import pe.edu.idat.apppatitas_compose.home.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun homeScreen(homeViewModel: HomeViewModel){
+fun homeScreen(homeViewModel: HomeViewModel,
+               principalNavigation: NavController
+){
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     val navController = rememberNavController()
@@ -73,7 +77,7 @@ fun homeScreen(homeViewModel: HomeViewModel){
                     "Voluntario" -> navController.navigate(Ruta.voluntarioScreen.path)
                     // Manejar otros elementos del menú si es necesario
                 }
-            })
+            }, homeViewModel)
         },
         content = {
             Column {
@@ -91,6 +95,21 @@ fun homeScreen(homeViewModel: HomeViewModel){
                         }) {
                             Icon(Icons.Default.Menu, contentDescription = "Menu")
                         }
+                    },
+                    actions = {
+                        IconButton(onClick = {
+
+                            homeViewModel.eliminarPersona()
+                            principalNavigation.navigate("loginScreen") {
+                                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.ExitToApp, // You can use any icon you prefer
+                                contentDescription = "Exit App",
+                                tint = Color.Black
+                            )
+                        }
                     }
                 )
                 NavHost(
@@ -98,7 +117,7 @@ fun homeScreen(homeViewModel: HomeViewModel){
                     startDestination = Ruta.mascotaScreen.path
                 ) {
                     composable(Ruta.mascotaScreen.path) { mascotaScreen(homeViewModel) }
-                    composable(Ruta.voluntarioScreen.path) { voluntarioScreen() }
+                    composable(Ruta.voluntarioScreen.path) { voluntarioScreen(homeViewModel) }
                     // Agrega otras rutas aquí si es necesario
                 }
             }
@@ -110,14 +129,16 @@ fun homeScreen(homeViewModel: HomeViewModel){
 @Composable
 fun DrawerContent(
     items: List<MenuItem>,
-    onItemClick: (MenuItem) -> Unit
+    onItemClick: (MenuItem) -> Unit,
+    homeViewModel: HomeViewModel
 ) {
-    Column(Modifier
-        .fillMaxSize()
-        .background(Color.White)
-        .systemBarsPadding()) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .systemBarsPadding()) {
         // Header
-        UserHeader()
+        UserHeader(homeViewModel)
         Spacer(modifier = Modifier.height(8.dp))
         // Menu items
         items.forEach { item ->
@@ -127,7 +148,8 @@ fun DrawerContent(
 }
 
 @Composable
-fun UserHeader() {
+fun UserHeader(homeViewModel: HomeViewModel) {
+    val persona by homeViewModel.persona.observeAsState()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -143,8 +165,12 @@ fun UserHeader() {
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column {
-            Text(text = "Sandra Adams", fontWeight = FontWeight.Bold)
-            Text(text = "sandra_a88@gmail.com", color = Color.Gray)
+            persona?.let {
+                values ->
+                Text(text = values.nombres, fontWeight = FontWeight.Bold)
+                Text(text = values.email, color = Color.Gray)
+            }
+
         }
     }
 }
